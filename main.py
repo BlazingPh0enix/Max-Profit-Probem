@@ -19,33 +19,35 @@ def max_profit(total_time):
         # Default: no building (profit from t-1)
         earnings[t] = earnings[t-1]
         choice[t] = choice[t-1][:]
-        
-        # Check for pub
-        if t >= time_to_build_pub:
-            profit_with_pub = earnings[t - time_to_build_pub] + (total_time - t) * money_from_pubs
-            if profit_with_pub > earnings[t]:
-                earnings[t] = profit_with_pub
-                choice[t] = choice[t - time_to_build_pub] + ['P']
-            elif profit_with_pub == earnings[t]:
-                choice[t].append(choice[t - time_to_build_pub] + ['P'])
+        remaining_time = total_time - t
 
-        # Check for theatre
-        if t >= time_to_build_theatre:
-            profit_with_theatre = earnings[t - time_to_build_theatre] + (total_time - t) * money_from_theatres
-            if profit_with_theatre > earnings[t]:
-                earnings[t] = profit_with_theatre
-                choice[t] = choice[t - time_to_build_theatre] + ['T']
-            elif profit_with_theatre == earnings[t]:
-                choice[t].append(choice[t - time_to_build_theatre] + ['T'])
+        if remaining_time > 0:  # Only consider building if there's remaining time        
+            # Check for pub
+            if t >= time_to_build_pub:
+                profit_with_pub = earnings[t - time_to_build_pub] + remaining_time * money_from_pubs
+                if profit_with_pub > earnings[t]:
+                    earnings[t] = profit_with_pub
+                    choice[t] = choice[t - time_to_build_pub] + ['P']
+                elif profit_with_pub == earnings[t]:
+                    choice[t].append(choice[t - time_to_build_pub] + ['P'])
 
-        # Check for commercial park
-        if t >= time_to_build_commercial_park:
-            profit_with_park = earnings[t - time_to_build_commercial_park] + (total_time - t) * money_from_commercial_parks
-            if profit_with_park > earnings[t]:
-                earnings[t] = profit_with_park
-                choice[t] = choice[t - time_to_build_commercial_park] + ['C']
-            elif profit_with_park == earnings[t]:
-                choice[t].append(choice[t - time_to_build_commercial_park] + ['C'])
+            # Check for theatre
+            if t >= time_to_build_theatre:
+                profit_with_theatre = earnings[t - time_to_build_theatre] + remaining_time * money_from_theatres
+                if profit_with_theatre > earnings[t]:
+                    earnings[t] = profit_with_theatre
+                    choice[t] = choice[t - time_to_build_theatre] + ['T']
+                elif profit_with_theatre == earnings[t]:
+                    choice[t].append(choice[t - time_to_build_theatre] + ['T'])
+
+            # Check for commercial park
+            if t >= time_to_build_commercial_park:
+                profit_with_park = earnings[t - time_to_build_commercial_park] + remaining_time * money_from_commercial_parks
+                if profit_with_park > earnings[t]:
+                    earnings[t] = profit_with_park
+                    choice[t] = choice[t - time_to_build_commercial_park] + ['C']
+                elif profit_with_park == earnings[t]:
+                    choice[t].append(choice[t - time_to_build_commercial_park] + ['C'])
     
     # Function to count buildings in a choice list
     def count_buildings(choices):
